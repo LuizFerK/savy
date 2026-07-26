@@ -76,3 +76,22 @@ export interface ListItem {
 }
 
 export type ListItemInput = Omit<ListItem, 'id' | 'createdAt'>
+
+export type WorkoutDayId = 'a' | 'b' | 'c'
+
+export interface Exercise {
+  id: string
+  name: string
+  sets: string
+}
+
+export interface MuscleGroup {
+  name: string
+  exercises: Exercise[]
+}
+
+export interface WorkoutDay {
+  id: WorkoutDayId
+  label: string
+  groups: MuscleGroup[]
+}
