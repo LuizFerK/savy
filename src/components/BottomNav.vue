@@ -23,7 +23,7 @@ const items = [
       v-for="item in items"
       :key="item.name"
       :to="{ name: item.name }"
-      flex="~ col" items-center justify-center gap-1 flex-1 h-full
+      flex="~ col" items-center justify-center gap-1 flex-1 h-full hover:text-gray-200
       :class="route.name === item.name ? 'text-gray-200' : 'text-gray-400'"
     >
       <component :is="item.icon" :size="20" />
