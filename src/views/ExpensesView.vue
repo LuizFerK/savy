@@ -5,9 +5,17 @@ import ExpenseList from '../components/ExpenseList.vue'
 import ExpenseModal from '../components/ExpenseModal.vue'
 import Spinner from '../components/Spinner.vue'
 import { PiggyBank, ShoppingBasket, Plus } from 'lucide-vue-next'
+import { useConfirmModal } from '../composables/useConfirmModal'
 
-const { balance, dailyAmount, expenses, loading } = useFinance()
+const { balance, dailyAmount, expenses, loading, clearAll } = useFinance()
+const { confirmModal } = useConfirmModal()
 const showAddModal = ref(false)
+
+async function handleClearAll() {
+  if (await confirmModal('Remover todos os gastos registrados?')) {
+    clearAll()
+  }
+}
 
 const formattedBalance = computed(() => {
   if (loading.value) return 'Carregando...'
@@ -29,9 +37,14 @@ const dailyAmountFormatted = computed(() => {
       <!-- Header / Balance -->
       <header px-4 h="1/4" z-10 sticky top-0 pt-8 pb-3 flex="~ col" justify-between>
         <div>
-          <div flex items-center gap-2 mb-1>
-            <PiggyBank text-gray-200 />
-            <h1 text-sm tracking-wide text-gray-200 font-bold>Saldo Atual</h1>
+          <div flex items-center justify-between mb-1>
+            <div flex items-center gap-2>
+              <PiggyBank text-gray-200 />
+              <h1 text-sm tracking-wide text-gray-200 font-bold>Saldo Atual</h1>
+            </div>
+            <button v-if="expenses.length" @click="handleClearAll" text-sm text-gray-200 hover:text-white>
+              Limpar tudo
+            </button>
           </div>
           <div text-5xl font-semibold tracking-tighter mt-3 mb-1 text-gray-200>
             {{ formattedBalance }}

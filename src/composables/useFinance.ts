@@ -4,9 +4,11 @@ import {
   collection,
   onSnapshot,
   addDoc,
+  doc,
   serverTimestamp,
   query,
   orderBy,
+  writeBatch,
   type DocumentData,
   Query
 } from 'firebase/firestore'
@@ -43,12 +45,19 @@ export function useFinance() {
     })
   }
 
+  async function clearAll() {
+    const batch = writeBatch(db)
+    expenses.value.forEach(expense => batch.delete(doc(db, 'expenses', expense.id)))
+    await batch.commit()
+  }
+
   return {
     expenses,
     balance,
     dailyAmount,
     loading,
-    addExpense
+    addExpense,
+    clearAll
   }
 }
 
