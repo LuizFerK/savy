@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Check, Trash2, GripVertical } from 'lucide-vue-next'
 import type { ListItem } from '../types'
+import { capitalize } from '../utils'
 
 defineProps<{
   item: ListItem
@@ -31,10 +32,10 @@ defineEmits<{
     </button>
 
     <span
-      flex-1 text-sm overflow-hidden text-ellipsis whitespace-nowrap
+      flex-1 text-sm break-words
       :class="item.completed ? 'text-gray-500 line-through' : 'text-gray-200'"
     >
-      {{ item.title }}
+      {{ capitalize(item.title) }}
     </span>
 
     <button @click="$emit('remove', item.id)" text-gray-500 hover:text-white flex-shrink-0 aria-label="Remover item">

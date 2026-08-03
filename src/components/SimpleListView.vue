@@ -6,6 +6,9 @@ import SimpleListAddSheet from './SimpleListAddSheet.vue'
 import Spinner from './Spinner.vue'
 import { Plus } from 'lucide-vue-next'
 import type { ListItem } from '../types'
+import { useConfirmModal } from '../composables/useConfirmModal'
+
+const { confirmModal } = useConfirmModal()
 
 const props = defineProps<{
   useList: () => {
@@ -35,14 +38,14 @@ function handleDragEnd() {
   reorderItems(items.value.map(item => item.id))
 }
 
-function handleRemove(id: string) {
-  if (confirm(props.removeConfirmText)) {
+async function handleRemove(id: string) {
+  if (await confirmModal(props.removeConfirmText)) {
     removeItem(id)
   }
 }
 
-function handleClearAll() {
-  if (confirm(props.clearConfirmText)) {
+async function handleClearAll() {
+  if (await confirmModal(props.clearConfirmText)) {
     clearAll()
   }
 }

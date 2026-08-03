@@ -12,7 +12,7 @@ import {
   type DocumentData,
   Query
 } from 'firebase/firestore'
-import { mealCategories } from '../utils'
+import { capitalize, mealCategories } from '../utils'
 import type { Recipe, RecipeInput, MealCategory } from '../types'
 
 const recipes = ref<Recipe[]>([])
@@ -42,13 +42,13 @@ export function useRecipes() {
 
   async function addRecipe(recipe: RecipeInput) {
     await addDoc(collection(db, 'recipes'), {
-      ...recipe,
+      ...normalizeRecipe(recipe),
       createdAt: serverTimestamp()
     })
   }
 
   async function updateRecipe(id: string, recipe: RecipeInput) {
-    await updateDoc(doc(db, 'recipes', id), { ...recipe })
+    await updateDoc(doc(db, 'recipes', id), { ...normalizeRecipe(recipe) })
   }
 
   return {
@@ -57,6 +57,15 @@ export function useRecipes() {
     loading,
     addRecipe,
     updateRecipe
+  }
+}
+
+function normalizeRecipe(recipe: RecipeInput): RecipeInput {
+  return {
+    ...recipe,
+    title: capitalize(recipe.title),
+    ingredients: recipe.ingredients.map(ingredient => ({ ...ingredient, name: capitalize(ingredient.name) })),
+    steps: recipe.steps.map(capitalize)
   }
 }
 

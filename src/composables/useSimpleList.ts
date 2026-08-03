@@ -14,6 +14,7 @@ import {
   Query
 } from 'firebase/firestore'
 import type { ListItem } from '../types'
+import { capitalize } from '../utils'
 
 // Shared behavior behind Tarefas/Mercado: a checkable, reorderable, Firestore-backed
 // list. Each collection gets its own singleton store (mirrors useFinance/useRecipes'
@@ -38,7 +39,7 @@ export function createSimpleListStore(collectionName: string) {
       const order = boundary === -1 ? before.length : boundary
 
       const newDoc = await addDoc(collection(db, collectionName), {
-        title,
+        title: capitalize(title),
         completed: false,
         order,
         createdAt: serverTimestamp()

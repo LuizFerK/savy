@@ -2,12 +2,16 @@
 import { ref, computed } from 'vue'
 import WorkoutDaySwitch from '../components/WorkoutDaySwitch.vue'
 import WorkoutGroup from '../components/WorkoutGroup.vue'
+import WorkoutWeightSheet from '../components/WorkoutWeightSheet.vue'
 import Spinner from '../components/Spinner.vue'
 import { useWorkoutProgress } from '../composables/useWorkoutProgress'
 import { workoutDays } from '../data/workouts'
 import type { WorkoutDayId } from '../types'
+import { useConfirmModal } from '../composables/useConfirmModal'
+import { capitalize } from '../utils'
 
-const { completed, loading, toggleExercise, resetExercises } = useWorkoutProgress()
+const { completed, weights, loading, toggleExercise, resetExercises, setWeight } = useWorkoutProgress()
+const { confirmModal } = useConfirmModal()
 
 const selectedDay = ref<WorkoutDayId>('a')
 const days = workoutDays.map(day => ({ id: day.id, label: day.label }))
@@ -16,9 +20,32 @@ const currentExerciseIds = computed(() =>
   currentDay.value.groups.flatMap(group => group.exercises.map(exercise => exercise.id))
 )
 
-function handleResetDay() {
-  if (confirm('Desmarcar todos os exercícios deste dia?')) {
+async function handleResetDay() {
+  if (await confirmModal('Desmarcar todos os exercícios deste dia?')) {
     resetExercises(currentExerciseIds.value)
+  }
+}
+
+const weightSheetOpen = ref(false)
+const selectedExerciseId = ref<string | null>(null)
+
+const selectedExercise = computed(() => {
+  if (!selectedExerciseId.value) return null
+  for (const group of currentDay.value.groups) {
+    const exercise = group.exercises.find(exercise => exercise.id === selectedExerciseId.value)
+    if (exercise) return exercise
+  }
+  return null
+})
+
+function handleEditWeight(id: string) {
+  selectedExerciseId.value = id
+  weightSheetOpen.value = true
+}
+
+function handleSaveWeight(weight: number) {
+  if (selectedExerciseId.value) {
+    setWeight(selectedExerciseId.value, weight)
   }
 }
 </script>
@@ -45,8 +72,17 @@ function handleResetDay() {
         :key="group.name"
         :group="group"
         :completed="completed"
+        :weights="weights"
         @toggle="toggleExercise"
+        @edit-weight="handleEditWeight"
       />
     </main>
+
+    <WorkoutWeightSheet
+      v-model="weightSheetOpen"
+      :exercise-name="selectedExercise ? capitalize(selectedExercise.name) : ''"
+      :initial-value="selectedExerciseId ? weights[selectedExerciseId] : undefined"
+      @save="handleSaveWeight"
+    />
   </div>
 </template>

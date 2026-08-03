@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BottomNav from './components/BottomNav.vue'
+import ConfirmModal from './components/ConfirmModal.vue'
 </script>
 
 <template>
@@ -8,6 +9,7 @@ import BottomNav from './components/BottomNav.vue'
       <router-view />
     </div>
     <BottomNav />
+    <ConfirmModal />
   </div>
 </template>
 

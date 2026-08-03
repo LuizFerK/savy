@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import type { Expense } from '../types'
 import dayjs from 'dayjs'
-import { categories } from '../utils'
+import { capitalize, categories } from '../utils'
 
 const props = defineProps<{
   expense: Expense
@@ -27,7 +27,7 @@ const category = computed(() => categories[props.expense.category])
         <component :is="category.icon" :size="20" :color="category.color" />
       </div>
       <div text-left w="2/3">
-        <h3 font-semibold text-gray-200 overflow-hidden text-ellipsis whitespace-nowrap class="expense_name">{{ expense.name }}</h3>
+        <h3 font-semibold text-gray-200 overflow-hidden text-ellipsis whitespace-nowrap>{{ capitalize(expense.name) }}</h3>
         <p text-xs text-gray-400>{{ expense.category }} • {{ formatDate(expense.createdAt) }}</p>
       </div>
       <div w-32 text="#f98fa5" font-bold font-mono text-right>
@@ -37,8 +37,3 @@ const category = computed(() => categories[props.expense.category])
   </div>
 </template>
 
-<style>
-.expense_name::first-letter {
-  text-transform: uppercase;
-}
-</style>

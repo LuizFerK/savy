@@ -4,6 +4,9 @@ import { useRecipes } from '../composables/useRecipes'
 import { ChevronLeft, Trash2 } from 'lucide-vue-next'
 import type { Ingredient, MealCategory, Recipe, RecipeInput } from '../types'
 import { mealCategoryIcons, mealCategories } from '../utils'
+import { useConfirmModal } from '../composables/useConfirmModal'
+
+const { alertModal } = useConfirmModal()
 
 const props = defineProps<{
   modelValue: boolean
@@ -97,7 +100,7 @@ async function handleSave() {
     close()
   } catch (e) {
     console.error(e)
-    alert('Erro ao salvar')
+    await alertModal('Erro ao salvar')
   } finally {
     loading.value = false
   }
@@ -152,6 +155,7 @@ function close() {
             <input
               v-model="title"
               type="text"
+              autocomplete="off"
               w-full bg-transparent border-b-2 border="white/20" py-3 mb-6 text-lg text-white placeholder-gray-500 outline-none transition-colors
               placeholder="Ex: Omelete de queijo"
               autofocus
@@ -164,6 +168,7 @@ function close() {
                   v-model.number="calories"
                   type="number"
                   inputmode="numeric"
+                  autocomplete="off"
                   placeholder="Opcional"
                   w-full bg-transparent border-b-2 border="white/20" py-2 text-sm text-white placeholder-gray-500 outline-none
                 />
@@ -174,6 +179,7 @@ function close() {
                   v-model.number="protein"
                   type="number"
                   inputmode="numeric"
+                  autocomplete="off"
                   placeholder="Opcional"
                   w-full bg-transparent border-b-2 border="white/20" py-2 text-sm text-white placeholder-gray-500 outline-none
                 />
@@ -191,12 +197,14 @@ function close() {
               <input
                 v-model="ingredient.quantity"
                 type="text"
+                autocomplete="off"
                 placeholder="Qtd."
                 w="1/4" bg-transparent border-b-2 border="white/20" py-2 text-sm text-white placeholder-gray-500 outline-none
               />
               <input
                 v-model="ingredient.name"
                 type="text"
+                autocomplete="off"
                 placeholder="Ingrediente"
                 flex-1 bg-transparent border-b-2 border="white/20" py-2 text-sm text-white placeholder-gray-500 outline-none
               />
@@ -217,6 +225,7 @@ function close() {
               <input
                 v-model="steps[index]"
                 type="text"
+                autocomplete="off"
                 placeholder="Descreva a etapa"
                 flex-1 bg-transparent border-b-2 border="white/20" py-2 text-sm text-white placeholder-gray-500 outline-none
               />

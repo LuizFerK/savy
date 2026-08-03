@@ -4,6 +4,9 @@ import { useFinance } from '../composables/useFinance'
 import { ChevronLeft } from 'lucide-vue-next'
 import type { Category } from '../types'
 import { categories } from '../utils'
+import { useConfirmModal } from '../composables/useConfirmModal'
+
+const { alertModal } = useConfirmModal()
 
 const props = defineProps<{
   modelValue: boolean
@@ -69,7 +72,7 @@ async function handleSave() {
     close()
   } catch (e) {
     console.error(e)
-    alert('Erro ao salvar')
+    await alertModal('Erro ao salvar')
   } finally {
     loading.value = false
   }
@@ -131,8 +134,9 @@ function close() {
               <span absolute left-0 top="1/2" translate-y="-1/2" text-2xl text-gray-400 font-medium>R$</span>
               <input
                 ref="amountInput"
-                type="tel" 
+                type="tel"
                 inputmode="numeric"
+                autocomplete="off"
                 :value="formattedAmount"
                 @input="handleAmountInput"
                 w-full pl-10 bg-transparent border-b-2 border="white/20" text-4xl font-bold text-white text-center focus:outline-none placeholder-gray-600
@@ -149,7 +153,8 @@ function close() {
             <input 
               ref="nameInput"
               v-model="name"
-              type="text" 
+              type="text"
+              autocomplete="off"
               w-full bg-transparent border-b-2 border="white/20" py-3 text-xl text-white placeholder-gray-500 outline-none transition-colors
               placeholder="Ex: Almoço de domingo"
               autofocus

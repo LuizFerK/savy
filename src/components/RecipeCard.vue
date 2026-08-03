@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Recipe } from '../types'
+import { capitalize } from '../utils'
 
 const props = defineProps<{
   recipe: Recipe
@@ -17,7 +18,7 @@ defineEmits<{
     bg="#3f4171" bg-opacity-50 shadow-sm flex="~ col" gap-1
   >
     <h3 font-semibold text-gray-200 text-sm overflow-hidden text-ellipsis whitespace-nowrap>
-      {{ recipe.title }}
+      {{ capitalize(recipe.title) }}
     </h3>
     <p v-if="recipe.calories || recipe.protein" text-xs text-gray-400>
       <span v-if="recipe.calories">{{ recipe.calories }}kcal</span>

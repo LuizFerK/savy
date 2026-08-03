@@ -1,6 +1,11 @@
 import * as Lucide from 'lucide-vue-next'
 import type { CategoryIcon, MealCategory, MealCategoryIcon } from './types'
 
+export function capitalize(text: string): string {
+  const trimmed = text.trim()
+  return trimmed.charAt(0).toUpperCase() + trimmed.slice(1)
+}
+
 export const categories: CategoryIcon = {
   Mercado: { icon: Lucide.ShoppingCart, color: '#A3DC9A' },
   Restaurante: { icon: Lucide.Utensils, color: '#CD5656' },

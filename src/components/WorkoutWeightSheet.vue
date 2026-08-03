@@ -1,44 +1,31 @@
 <script setup lang="ts">
 import { ref, nextTick, watch } from 'vue'
-import { useConfirmModal } from '../composables/useConfirmModal'
-
-const { alertModal } = useConfirmModal()
 
 const props = defineProps<{
   modelValue: boolean
-  heading: string
-  placeholder: string
+  exerciseName: string
+  initialValue: number | undefined
 }>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void
-  (e: 'add', title: string): void | Promise<void>
+  (e: 'save', weight: number): void
 }>()
 
-const title = ref('')
-const loading = ref(false)
-const titleInput = ref<HTMLInputElement | null>(null)
+const weight = ref<number | undefined>(undefined)
+const weightInput = ref<HTMLInputElement | null>(null)
 
 watch(() => props.modelValue, async (open) => {
   if (!open) return
-  title.value = ''
+  weight.value = props.initialValue
   await nextTick()
-  titleInput.value?.focus()
+  weightInput.value?.focus()
 })
 
-async function handleSave() {
-  if (!title.value.trim()) return
-
-  loading.value = true
-  try {
-    await emit('add', title.value.trim())
-    close()
-  } catch (e) {
-    console.error(e)
-    await alertModal('Erro ao salvar')
-  } finally {
-    loading.value = false
-  }
+function handleSave() {
+  if (!weight.value || weight.value <= 0) return
+  emit('save', Math.round(weight.value))
+  close()
 }
 
 function close() {
@@ -53,27 +40,28 @@ function close() {
 
         <!-- Header -->
         <div flex items-center justify-between mb-6>
-          <h2 text-xl font-bold text-gray-200>{{ heading }}</h2>
+          <h2 text-xl font-bold text-gray-200>{{ exerciseName }}</h2>
           <button @click="close" text-sm text-gray-400 hover:text-white>Cancelar</button>
         </div>
 
-        <label text-gray-400 text-sm mb-2 block>Título</label>
+        <label text-gray-400 text-sm mb-2 block>Peso (kg)</label>
         <input
-          ref="titleInput"
-          v-model="title"
-          type="text"
+          ref="weightInput"
+          v-model.number="weight"
+          type="number"
+          inputmode="numeric"
           autocomplete="off"
           w-full bg-transparent border-b-2 border="white/20" py-3 mb-6 text-lg text-white placeholder-gray-500 outline-none transition-colors
-          :placeholder="placeholder"
+          placeholder="Ex: 20"
           @keydown.enter="handleSave"
         />
 
         <button
           @click="handleSave"
           w-full py-3.5 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all
-          :disabled="loading || !title.trim()"
+          :disabled="!weight || weight <= 0"
         >
-          {{ loading ? 'Salvando...' : 'Salvar' }}
+          Salvar
         </button>
 
       </div>

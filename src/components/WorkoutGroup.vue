@@ -5,10 +5,12 @@ import type { MuscleGroup } from '../types'
 defineProps<{
   group: MuscleGroup
   completed: Record<string, boolean>
+  weights: Record<string, number>
 }>()
 
 defineEmits<{
   (e: 'toggle', id: string): void
+  (e: 'edit-weight', id: string): void
 }>()
 </script>
 
@@ -20,7 +22,9 @@ defineEmits<{
       :key="exercise.id"
       :exercise="exercise"
       :completed="!!completed[exercise.id]"
+      :weight="weights[exercise.id]"
       @toggle="$emit('toggle', $event)"
+      @edit-weight="$emit('edit-weight', $event)"
     />
   </section>
 </template>

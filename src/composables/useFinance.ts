@@ -12,6 +12,7 @@ import {
 } from 'firebase/firestore'
 import dayjs from 'dayjs'
 import type { Expense, ExpenseInput } from '../types'
+import { capitalize } from '../utils'
 
 const expenses = ref<Expense[]>([])
 const expensesRef = ref<Query<DocumentData, DocumentData> | null>(null)
@@ -37,6 +38,7 @@ export function useFinance() {
   async function addExpense(expense: ExpenseInput) {
     await addDoc(collection(db, 'expenses'), {
       ...expense,
+      name: capitalize(expense.name),
       createdAt: serverTimestamp()
     })
   }

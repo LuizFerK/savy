@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Recipe } from '../types'
-import { mealCategoryIcons } from '../utils'
+import { capitalize, mealCategoryIcons } from '../utils'
 
 const props = defineProps<{
   modelValue: boolean
@@ -32,7 +32,7 @@ function close() {
         </div>
 
         <div flex-1 overflow-y-auto class="no-scrollbar">
-          <h1 text-2xl font-bold text-gray-200 mb-1>{{ recipe.title }}</h1>
+          <h1 text-2xl font-bold text-gray-200 mb-1>{{ capitalize(recipe.title) }}</h1>
 
           <p v-if="recipe.calories || recipe.protein" text-sm text-gray-400 mb-6>
             <span v-if="recipe.calories">{{ recipe.calories }}kcal</span>
@@ -44,7 +44,7 @@ function close() {
             <h3 text-sm font-bold text-gray-200 mb-2>Ingredientes</h3>
             <ul space-y-1>
               <li v-for="(ingredient, index) in recipe.ingredients" :key="index" text-sm text-gray-300>
-                <span text-gray-400>{{ ingredient.quantity }}</span> {{ ingredient.name }}
+                <span text-gray-400>{{ ingredient.quantity }}</span> {{ capitalize(ingredient.name) }}
               </li>
             </ul>
           </div>
@@ -53,7 +53,7 @@ function close() {
             <h3 text-sm font-bold text-gray-200 mb-2>Modo de preparo</h3>
             <ol space-y-2>
               <li v-for="(step, index) in recipe.steps" :key="index" text-sm text-gray-300>
-                {{ index + 1 }}. {{ step }}
+                {{ index + 1 }}. {{ capitalize(step) }}
               </li>
             </ol>
           </div>
