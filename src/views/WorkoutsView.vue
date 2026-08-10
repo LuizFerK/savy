@@ -16,13 +16,13 @@ const { confirmModal } = useConfirmModal()
 const selectedDay = ref<WorkoutDayId>('a')
 const days = workoutDays.map(day => ({ id: day.id, label: day.label }))
 const currentDay = computed(() => workoutDays.find(day => day.id === selectedDay.value)!)
-const currentExerciseIds = computed(() =>
-  currentDay.value.groups.flatMap(group => group.exercises.map(exercise => exercise.id))
+const allExerciseIds = workoutDays.flatMap(day =>
+  day.groups.flatMap(group => group.exercises.map(exercise => exercise.id))
 )
 
 async function handleResetDay() {
-  if (await confirmModal('Desmarcar todos os exercícios deste dia?')) {
-    resetExercises(currentExerciseIds.value)
+  if (await confirmModal('Desmarcar todos os exercícios de todos os dias?')) {
+    resetExercises(allExerciseIds)
   }
 }
 
