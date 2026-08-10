@@ -16,7 +16,7 @@ defineEmits<{
 <template>
   <div
     :data-item-id="item.id"
-    flex items-center gap-3 rounded-2xl p-3 mb-3 select-none
+    flex items-center gap-3 rounded-2xl p-3 mb-3
     bg="#3f4171" bg-opacity-50
   >
     <button
@@ -42,7 +42,7 @@ defineEmits<{
       <Trash2 :size="18" />
     </button>
 
-    <span class="drag-handle" text-gray-500 flex-shrink-0 cursor-grab active:cursor-grabbing>
+    <span class="drag-handle" text-gray-500 flex-shrink-0 select-none cursor-grab active:cursor-grabbing>
       <GripVertical :size="18" />
     </span>
   </div>
