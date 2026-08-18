@@ -35,19 +35,16 @@ export function createSimpleListStore(collectionName: string) {
     async function addItem(title: string) {
       // Snapshot before the write — onSnapshot can update items.value while addDoc is in flight
       const before = [...items.value]
-      const boundary = before.findIndex(item => item.completed)
-      const order = boundary === -1 ? before.length : boundary
 
       const newDoc = await addDoc(collection(db, collectionName), {
         title: capitalize(title),
         completed: false,
-        order,
+        order: 0,
         createdAt: serverTimestamp()
       })
 
-      // New items must land before any already-completed ones, not just at the end
-      const list = [...before]
-      list.splice(order, 0, { id: newDoc.id, completed: false } as ListItem)
+      // New items land at the top of the list
+      const list = [{ id: newDoc.id, completed: false } as ListItem, ...before]
 
       await persistOrder(list)
     }
