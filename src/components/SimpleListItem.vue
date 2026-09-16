@@ -16,8 +16,8 @@ defineEmits<{
 <template>
   <div
     :data-item-id="item.id"
-    flex items-center gap-3 rounded-2xl p-3 mb-3
-    bg="#3f4171" bg-opacity-50
+    flex items-center gap-3 rounded-2xl p-3 mb-3 md:mb-0
+    bg="zinc-800/60"
   >
     <button
       @click="$emit('toggle', item.id)"

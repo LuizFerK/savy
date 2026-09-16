@@ -20,7 +20,7 @@ function close() {
 <template>
   <Transition name="modal">
     <div v-if="modelValue && recipe" fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black-50 backdrop-blur-sm @click.self="close">
-      <div w-full h="5/6" bg="#343466" rounded-t-2xl sm:rounded-2xl p-6 shadow-xl class="modal-card flex flex-col">
+      <div w-full h="5/6" bg-zinc-900 rounded-t-2xl sm:rounded-2xl p-6 shadow-xl class="modal-card flex flex-col sm:w-1/2 sm:max-w-lg">
 
         <!-- Header -->
         <div flex items-center justify-between mb-6>

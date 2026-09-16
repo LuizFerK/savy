@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gray-on-color",
+        "value": "*",
+        "files": [
+          "src/components/WorkoutDaySwitch.vue"
+        ],
+        "createdAt": "2026-09-15T23:56:33.634Z",
+        "reason": "false positive: text-gray-400 only applies to the unselected-tab ternary branch, which has no colored background (parent bg is zinc-800/60); the branch with the green bg already uses text-white"
+      }
+    ]
+  }
+}

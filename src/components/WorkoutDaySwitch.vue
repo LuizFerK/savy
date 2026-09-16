@@ -12,7 +12,7 @@ defineEmits<{
 </script>
 
 <template>
-  <div flex bg="#3f4171" bg-opacity-50 rounded-xl p-1 gap-1>
+  <div flex bg="zinc-800/60" rounded-xl p-1 gap-1>
     <button
       v-for="day in days"
       :key="day.id"

@@ -8,7 +8,7 @@ import { Plus } from 'lucide-vue-next'
 import type { ListItem } from '../types'
 import { useConfirmModal } from '../composables/useConfirmModal'
 
-const { confirmModal } = useConfirmModal()
+const { confirmModal, chooseModal } = useConfirmModal()
 
 const props = defineProps<{
   useList: () => {
@@ -16,7 +16,7 @@ const props = defineProps<{
     loading: import('vue').Ref<boolean>
     addItem: (title: string) => Promise<void>
     removeItem: (id: string) => Promise<void>
-    clearAll: () => Promise<void>
+    clearAll: (onlyCompleted?: boolean) => Promise<void>
     toggleItem: (id: string) => void
     reorderItems: (orderedIds: string[]) => Promise<void>
   }
@@ -45,9 +45,14 @@ async function handleRemove(id: string) {
 }
 
 async function handleClearAll() {
-  if (await confirmModal(props.clearConfirmText)) {
-    clearAll()
-  }
+  const choice = await chooseModal(props.clearConfirmText, [
+    { label: 'Cancelar', value: 'cancel', variant: 'secondary' },
+    { label: 'Apagar tudo feito', value: 'completed', variant: 'secondary' },
+    { label: 'Apagar tudo', value: 'all', variant: 'danger' }
+  ], 'cancel')
+
+  if (choice === 'completed') await clearAll(true)
+  else if (choice === 'all') await clearAll(false)
 }
 
 // Manual FLIP animation: toggling completion reorders the list via a Firestore
@@ -98,47 +103,50 @@ watch(items, () => {
 
 <template>
   <div h-full flex="~ col" text-left>
-    <header px-4 pt-8 pb-3 flex items-center justify-between>
-      <h1 text-lg font-bold text-gray-200>{{ title }}</h1>
-      <div flex items-center gap-4>
-        <button v-if="items.length" @click="handleClearAll" text-sm text-gray-400 hover:text-white>
-          Limpar tudo
-        </button>
-        <button
-          @click="showAdd = true"
-          w-10 h-10 rounded-full bg-green-600 hover:bg-green-700 text-white
-          flex items-center justify-center transition-all active:scale-95
-          :aria-label="addAriaLabel"
-        >
-          <Plus :size="20" />
-        </button>
-      </div>
-    </header>
+    <div flex="~ col" flex-1 min-h-0 w-full md:max-w-5xl md:mx-auto>
+      <header px-4 md:px-8 pt-8 pb-3 flex items-center justify-between>
+        <h1 text-lg font-bold text-gray-200>{{ title }}</h1>
+        <div flex items-center gap-4>
+          <button v-if="items.length" @click="handleClearAll" text-sm text-gray-400 hover:text-white>
+            Limpar tudo
+          </button>
+          <button
+            @click="showAdd = true"
+            w-10 h-10 rounded-full bg-green-600 hover:bg-green-700 text-white
+            flex items-center justify-center transition-all active:scale-95
+            :aria-label="addAriaLabel"
+          >
+            <Plus :size="20" />
+          </button>
+        </div>
+      </header>
 
-    <div v-if="loading">
-      <Spinner />
+      <div v-if="loading">
+        <Spinner />
+      </div>
+      <main v-else flex-1 min-h-0 overflow-y-auto class="no-scrollbar" px-4 md:px-8 pb-6>
+        <div ref="listEl">
+          <draggable
+            v-model="items"
+            item-key="id"
+            handle=".drag-handle"
+            :animation="150"
+            :force-fallback="true"
+            ghost-class="drag-ghost"
+            class="md:grid md:grid-cols-2 xl:grid-cols-3 md:gap-3"
+            @end="handleDragEnd"
+          >
+            <template #item="{ element }">
+              <SimpleListItem :item="element" @toggle="handleToggle" @remove="handleRemove" />
+            </template>
+          </draggable>
+        </div>
+
+        <div v-if="items.length === 0" text-center text-gray-500 py-10>
+          {{ emptyText }}
+        </div>
+      </main>
     </div>
-    <main v-else flex-1 overflow-y-auto class="no-scrollbar" px-4 pb-6>
-      <div ref="listEl">
-        <draggable
-          v-model="items"
-          item-key="id"
-          handle=".drag-handle"
-          :animation="150"
-          :force-fallback="true"
-          ghost-class="drag-ghost"
-          @end="handleDragEnd"
-        >
-          <template #item="{ element }">
-            <SimpleListItem :item="element" @toggle="handleToggle" @remove="handleRemove" />
-          </template>
-        </draggable>
-      </div>
-
-      <div v-if="items.length === 0" text-center text-gray-500 py-10>
-        {{ emptyText }}
-      </div>
-    </main>
 
     <SimpleListAddSheet v-model="showAdd" :heading="addSheetTitle" :placeholder="addPlaceholder" @add="addItem" />
   </div>

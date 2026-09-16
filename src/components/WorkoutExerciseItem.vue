@@ -18,7 +18,7 @@ defineEmits<{
 <template>
   <div
     flex items-center gap-3 rounded-2xl p-3 mb-3 select-none
-    bg="#3f4171" bg-opacity-50
+    bg="zinc-800/60"
   >
     <button
       @click="$emit('toggle', exercise.id)"
@@ -43,7 +43,7 @@ defineEmits<{
     <button
       @click="$emit('edit-weight', exercise.id)"
       flex-shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold transition-colors
-      bg="#343466"
+      bg-zinc-900
       :class="weight ? 'text-green-500' : 'text-gray-500'"
       aria-label="Anotar peso do exercício"
     >

@@ -53,9 +53,10 @@ export function createSimpleListStore(collectionName: string) {
       await deleteDoc(doc(db, collectionName, id))
     }
 
-    async function clearAll() {
+    async function clearAll(onlyCompleted = false) {
+      const targets = onlyCompleted ? items.value.filter(item => item.completed) : items.value
       const batch = writeBatch(db)
-      items.value.forEach(item => batch.delete(doc(db, collectionName, item.id)))
+      targets.forEach(item => batch.delete(doc(db, collectionName, item.id)))
       await batch.commit()
     }
 

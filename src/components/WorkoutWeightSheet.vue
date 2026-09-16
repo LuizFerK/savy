@@ -36,7 +36,7 @@ function close() {
 <template>
   <Transition name="modal">
     <div v-if="modelValue" fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black-50 backdrop-blur-sm @click.self="close">
-      <div w-full bg="#343466" rounded-t-2xl sm:rounded-2xl p-6 shadow-xl class="modal-card">
+      <div w-full bg-zinc-900 rounded-t-2xl sm:rounded-2xl p-6 shadow-xl class="modal-card sm:w-1/2 sm:max-w-lg">
 
         <!-- Header -->
         <div flex items-center justify-between mb-6>

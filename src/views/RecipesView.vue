@@ -56,27 +56,29 @@ function openEditFromDetail() {
 
 <template>
   <div h-full flex="~ col" text-left>
-    <header px-4 pt-8 pb-3 flex items-center justify-between>
-      <h1 text-lg font-bold text-gray-200>Livro de Receitas</h1>
-      <button
-        @click="openAdd"
-        w-10 h-10 rounded-full bg-green-600 hover:bg-green-700 text-white
-        flex items-center justify-center transition-all active:scale-95
-        aria-label="Adicionar prato"
-      >
-        <Plus :size="20" />
-      </button>
-    </header>
+    <div flex="~ col" flex-1 min-h-0 w-full md:max-w-5xl md:mx-auto>
+      <header px-4 md:px-8 pt-8 pb-3 flex items-center justify-between>
+        <h1 text-lg font-bold text-gray-200>Livro de Receitas</h1>
+        <button
+          @click="openAdd"
+          w-10 h-10 rounded-full bg-green-600 hover:bg-green-700 text-white
+          flex items-center justify-center transition-all active:scale-95
+          aria-label="Adicionar prato"
+        >
+          <Plus :size="20" />
+        </button>
+      </header>
 
-    <main flex-1 overflow-y-auto class="no-scrollbar" px-4 space-y-6 pb-6>
-      <div v-for="category in mealCategories" :key="category" :ref="setSectionRef(category)">
-        <RecipeSection
-          :category="category"
-          :recipes="groupedRecipes[category]"
-          @select="openDetail"
-        />
-      </div>
-    </main>
+      <main flex-1 min-h-0 overflow-y-auto class="no-scrollbar" px-4 md:px-8 space-y-6 pb-6>
+        <div v-for="category in mealCategories" :key="category" :ref="setSectionRef(category)">
+          <RecipeSection
+            :category="category"
+            :recipes="groupedRecipes[category]"
+            @select="openDetail"
+          />
+        </div>
+      </main>
+    </div>
 
     <RecipeDetailModal v-model="showDetail" :recipe="selectedRecipe" @edit="openEditFromDetail" />
     <RecipeFormModal v-model="showForm" :recipe="editingRecipe" />

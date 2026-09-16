@@ -16,11 +16,11 @@ export default defineConfig({
         navigateFallback: '/index.html'
       },
       manifest: {
-        name: 'Savy',
-        short_name: 'Savy',
-        description: 'Daily savings tracker',
-        theme_color: '#343466',
-        background_color: '#343466',
+        name: 'Zelo',
+        short_name: 'Zelo',
+        description: 'Organizador pessoal do dia a dia',
+        theme_color: '#09090b',
+        background_color: '#09090b',
         icons: [
           {
             src: 'pwa-192x192.png',

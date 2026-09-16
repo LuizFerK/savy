@@ -90,7 +90,7 @@ function close() {
 <template>
   <Transition name="modal">
     <div v-if="modelValue" fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black-50 backdrop-blur-sm @click.self="close">
-      <div w-full h="5/6" bg="#343466" rounded-t-2xl sm:rounded-2xl p-6 shadow-xl class="modal-card flex flex-col">
+      <div w-full h="5/6" bg-zinc-900 rounded-t-2xl sm:rounded-2xl p-6 shadow-xl class="modal-card flex flex-col sm:w-1/2 sm:max-w-lg">
         
         <!-- Header -->
         <div flex items-center justify-between mb-6>
@@ -119,10 +119,10 @@ function close() {
               flex flex-col items-center justify-center aspect-square rounded-xl border-2 transition-all p-2
               :style="{
                 background: category === cat ? color : '#ffffff10',
-                color: category === cat ? '#343466' : '#e5e7eb'
+                color: category === cat ? '#09090b' : '#e5e7eb'
               }"
             >
-              <component :is="icon" :color="cat === category ? '#343466' : color" transition-colors :size="32" mb-2 />
+              <component :is="icon" :color="cat === category ? '#09090b' : color" transition-colors :size="32" mb-2 />
               <span text-xs font-medium text-center>{{ cat }}</span>
             </button>
           </div>

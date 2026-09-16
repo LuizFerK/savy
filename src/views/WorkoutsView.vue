@@ -52,31 +52,35 @@ function handleSaveWeight(weight: number) {
 
 <template>
   <div h-full flex="~ col" text-left>
-    <header px-4 pt-8 pb-3>
-      <div flex items-center justify-between mb-4>
-        <h1 text-lg font-bold text-gray-200>Treinos</h1>
-        <button @click="handleResetDay" text-sm text-gray-400 hover:text-white>
-          Desmarcar tudo
-        </button>
-      </div>
-      <WorkoutDaySwitch v-model="selectedDay" :days="days" />
-      <p text-xs text-gray-500 mt-3>{{ currentDay.label }}</p>
-    </header>
+    <div flex="~ col" flex-1 min-h-0 w-full md:max-w-5xl md:mx-auto>
+      <header px-4 md:px-8 pt-8 pb-3>
+        <div flex items-center justify-between mb-4>
+          <h1 text-lg font-bold text-gray-200>Treinos</h1>
+          <button @click="handleResetDay" text-sm text-gray-400 hover:text-white>
+            Desmarcar tudo
+          </button>
+        </div>
+        <WorkoutDaySwitch v-model="selectedDay" :days="days" />
+        <p text-xs text-gray-500 mt-3>{{ currentDay.label }}</p>
+      </header>
 
-    <div v-if="loading">
-      <Spinner />
+      <div v-if="loading">
+        <Spinner />
+      </div>
+      <main v-else flex-1 min-h-0 overflow-y-auto class="no-scrollbar" px-4 md:px-8 pb-6>
+        <div md:grid md:grid-cols-2 md:gap-x-6>
+          <WorkoutGroup
+            v-for="group in currentDay.groups"
+            :key="group.name"
+            :group="group"
+            :completed="completed"
+            :weights="weights"
+            @toggle="toggleExercise"
+            @edit-weight="handleEditWeight"
+          />
+        </div>
+      </main>
     </div>
-    <main v-else flex-1 overflow-y-auto class="no-scrollbar" px-4 pb-6>
-      <WorkoutGroup
-        v-for="group in currentDay.groups"
-        :key="group.name"
-        :group="group"
-        :completed="completed"
-        :weights="weights"
-        @toggle="toggleExercise"
-        @edit-weight="handleEditWeight"
-      />
-    </main>
 
     <WorkoutWeightSheet
       v-model="weightSheetOpen"

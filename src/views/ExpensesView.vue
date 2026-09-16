@@ -27,29 +27,32 @@ const dailyAmountFormatted = computed(() => {
   if (loading.value) return '...'
   return `R$${dailyAmount.toFixed(2).replace('.', ',')}`
 })
+
+const fabClass = computed(() => [
+  balance.value >= 0 ? 'bg-green-600' : 'bg-red-500',
+  loading.value ? 'opacity-0' : 'opacity-100'
+])
 </script>
 
 <template>
-  <div class="background-accent" :class="{'green': balance >= 0, 'red': balance < 0, 'opacity-0': loading, 'opacity-100': !loading}"></div>
-  <div class="background-accent secondary" :class="{'green': balance >= 0, 'red': balance < 0, 'opacity-0': loading, 'opacity-100': !loading}"></div>
-  <div h-full text-left min-h-0 text-gray-900 font-sans>
-    <div max-w-md mx-auto h-full flex flex-col relative>
+  <div h-full overflow-y-auto class="no-scrollbar" text-left text-gray-900 font-sans>
+    <div w-full md:max-w-4xl md:mx-auto px-4 md:px-8>
       <!-- Header / Balance -->
-      <header px-4 h="1/4" z-10 sticky top-0 pt-8 pb-3 flex="~ col" justify-between>
+      <header pt-8 pb-3 flex="~ col" gap-4>
         <div>
           <div flex items-center justify-between mb-1>
             <div flex items-center gap-2>
               <PiggyBank text-gray-200 />
               <h1 text-sm tracking-wide text-gray-200 font-bold>Saldo Atual</h1>
             </div>
-            <button v-if="expenses.length" @click="handleClearAll" text-sm text-gray-200 hover:text-white>
+            <button v-if="expenses.length" @click="handleClearAll" text-sm text-gray-400 hover:text-white>
               Limpar tudo
             </button>
           </div>
-          <div text-5xl font-semibold tracking-tighter mt-3 mb-1 text-gray-200>
+          <div text-5xl font-semibold tracking-tighter mt-3 mb-1 text-gray-100>
             {{ formattedBalance }}
           </div>
-          <span text-sm text-gray-200>Gasto médio diário: {{ dailyAmountFormatted }}</span>
+          <span text-sm text-gray-400>Gasto médio diário: {{ dailyAmountFormatted }}</span>
         </div>
         <div flex items-center gap-2>
           <ShoppingBasket :size="20" text-gray-200 />
@@ -58,29 +61,27 @@ const dailyAmountFormatted = computed(() => {
       </header>
 
       <!-- Content -->
-      <main h="3/4">
+      <main pb-24>
         <div v-if="loading">
           <Spinner />
         </div>
-        <div v-else h-full overflow-y-auto class="no-scrollbar">
-          <ExpenseList px-4 :expenses="expenses" />
-        </div>
+        <ExpenseList v-else :expenses="expenses" />
       </main>
-
-      <!-- FAB -->
-      <button
-        @click="showAddModal = true"
-        fixed right-6 w-14 h-14
-        style="bottom: calc(var(--bottom-nav-h) + 1.5rem)"
-        :class="{'green': balance >= 0, 'red': balance < 0, 'opacity-0': loading, 'opacity-100': !loading}"
-        text-white rounded-full shadow-lg flex items-center justify-center
-        text-2xl hover:scale-105 transition-all active:scale-95
-        aria-label="Adicionar compra"
-      >
-        <Plus :size="22" color-gray-200 />
-      </button>
-
-      <ExpenseModal v-model="showAddModal" />
     </div>
+
+    <!-- FAB -->
+    <button
+      @click="showAddModal = true"
+      fixed right-6 w-14 h-14
+      style="bottom: calc(var(--bottom-nav-h) + 1.5rem)"
+      :class="fabClass"
+      text-white rounded-full shadow-lg flex items-center justify-center
+      text-2xl hover:scale-105 transition-all active:scale-95
+      aria-label="Adicionar compra"
+    >
+      <Plus :size="22" />
+    </button>
+
+    <ExpenseModal v-model="showAddModal" />
   </div>
 </template>

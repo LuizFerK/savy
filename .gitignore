@@ -14,6 +14,8 @@ dist-ssr
 .env
 .env.local
 
+.impeccable/hook.cache.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

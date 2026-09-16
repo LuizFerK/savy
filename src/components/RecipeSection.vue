@@ -22,7 +22,11 @@ const icon = mealCategoryIcons[props.category].icon
       <h2 text-sm tracking-wide text-gray-200 font-bold>{{ category }}</h2>
     </div>
 
-    <div v-if="recipes.length" flex gap-3 overflow-x-auto class="no-scrollbar" pb-1>
+    <div
+      v-if="recipes.length"
+      flex gap-3 overflow-x-auto class="no-scrollbar" pb-1
+      md:grid md:grid-cols-3 lg:grid-cols-4 md:gap-4 md:overflow-visible md:pb-0
+    >
       <RecipeCard
         v-for="recipe in recipes"
         :key="recipe.id"

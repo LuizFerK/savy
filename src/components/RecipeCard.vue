@@ -14,8 +14,8 @@ defineEmits<{
 <template>
   <button
     @click="$emit('select', recipe)"
-    w-40 flex-shrink-0 text-left rounded-3xl p-4 select-none
-    bg="#3f4171" bg-opacity-50 shadow-sm flex="~ col" gap-1
+    w-40 md:w-full flex-shrink-0 md:flex-shrink text-left rounded-3xl p-4 select-none
+    bg="zinc-800/60" shadow-sm flex="~ col" gap-1
   >
     <h3 font-semibold text-gray-200 text-sm overflow-hidden text-ellipsis whitespace-nowrap>
       {{ capitalize(recipe.title) }}
